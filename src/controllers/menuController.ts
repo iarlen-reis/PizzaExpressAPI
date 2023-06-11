@@ -64,4 +64,30 @@ export class MenuController {
       reply.status(404).send({ error: 'Dish not found.' })
     }
   }
+
+  async delete(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const paramsSchema = z.object({
+        id: z.string(),
+      })
+
+      const { id } = paramsSchema.parse(request.params)
+
+      const dish = await prisma.dish.findFirstOrThrow({
+        where: {
+          id,
+        },
+      })
+
+      await prisma.dish.delete({
+        where: {
+          id: dish.id,
+        },
+      })
+
+      return dish
+    } catch (error) {
+      reply.status(404).send({ error: 'Dish not found.' })
+    }
+  }
 }

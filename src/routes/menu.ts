@@ -16,5 +16,6 @@ export class MenuRoutes {
     this.app.get('/dishes', this.menuController.index)
     this.app.post('/dishes', this.menuController.store)
     this.app.get('/dishes/:id', this.menuController.show)
+    this.app.delete('/dishes/:id', this.menuController.delete)
   }
 }
