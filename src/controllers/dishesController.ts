@@ -65,6 +65,45 @@ export class DishesController {
     }
   }
 
+  async update(request: FastifyRequest, reply: FastifyReply) {
+    const paramsSchema = z.object({
+      id: z.string(),
+    })
+
+    const bodySchema = z.object({
+      title: z.string(),
+      description: z.string(),
+      price: z.string(),
+      ingredients: z.array(z.string()),
+    })
+
+    const { id } = paramsSchema.parse(request.params)
+
+    const dish = await prisma.dish.findUniqueOrThrow({
+      where: {
+        id,
+      },
+    })
+
+    const { title, description, price, ingredients } = bodySchema.parse(
+      request.body,
+    )
+
+    const dishUpdate = await prisma.dish.update({
+      where: {
+        id: dish.id,
+      },
+      data: {
+        title,
+        description,
+        price,
+        ingredients,
+      },
+    })
+
+    return dishUpdate
+  }
+
   async delete(request: FastifyRequest, reply: FastifyReply) {
     try {
       const paramsSchema = z.object({

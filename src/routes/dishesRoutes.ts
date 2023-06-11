@@ -16,6 +16,7 @@ export class DishesRoutes {
     this.app.get('/dishes', this.dishesController.index)
     this.app.post('/dishes', this.dishesController.store)
     this.app.get('/dishes/:id', this.dishesController.show)
+    this.app.put('/dishes/:id', this.dishesController.update)
     this.app.delete('/dishes/:id', this.dishesController.delete)
   }
 }
