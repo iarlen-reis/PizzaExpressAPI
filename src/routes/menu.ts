@@ -14,6 +14,7 @@ export class MenuRoutes {
 
   allMenuRoutes() {
     this.app.get('/dishes', this.menuController.index)
-    this.app.post('/dishes', this.menuController.create)
+    this.app.post('/dishes', this.menuController.store)
+    this.app.get('/dishes/:id', this.menuController.show)
   }
 }
