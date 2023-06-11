@@ -9,8 +9,7 @@ class Server {
   }
 
   routes() {
-    const menuRoutes = new MenuRoutes(this.app)
-    menuRoutes.allMenuRoutes()
+    new MenuRoutes(this.app)
   }
 
   start() {

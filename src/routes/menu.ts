@@ -1,48 +1,19 @@
 import { FastifyInstance } from 'fastify'
-import { prisma } from '../lib/prisma'
-import { z } from 'zod'
+import { MenuController } from '../controllers/menuController'
 
 export class MenuRoutes {
   app: FastifyInstance
+  menuController: MenuController
 
   constructor(app: FastifyInstance) {
     this.app = app
-  }
+    this.menuController = new MenuController()
 
-  private index() {
-    this.app.get('/menu', async (request, reply) => {
-      reply.status(200).send({ menu: 'aqui' })
-    })
-  }
-
-  private create() {
-    this.app.post('/menu', async (request, reply) => {
-      const bodySchema = z.object({
-        title: z.string(),
-        description: z.string(),
-        price: z.string(),
-        ingredients: z.array(z.string()),
-      })
-
-      const { title, description, price, ingredients } = bodySchema.parse(
-        request.body,
-      )
-
-      const dish = await prisma.dish.create({
-        data: {
-          title,
-          description,
-          price,
-          ingredients,
-        },
-      })
-
-      reply.status(201).send(dish)
-    })
+    this.allMenuRoutes()
   }
 
   allMenuRoutes() {
-    this.index()
-    this.create()
+    this.app.get('/dishes', this.menuController.index)
+    this.app.post('/dishes', this.menuController.create)
   }
 }
