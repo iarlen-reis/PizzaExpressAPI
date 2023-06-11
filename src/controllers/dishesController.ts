@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { prisma } from '../lib/prisma'
 import { z } from 'zod'
 
-export class MenuController {
+export class DishesController {
   async index(request: FastifyRequest, reply: FastifyReply) {
     try {
       const dishes = await prisma.dish.findMany()

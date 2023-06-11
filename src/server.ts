@@ -1,5 +1,5 @@
 import fastify, { FastifyInstance } from 'fastify'
-import { MenuRoutes } from './routes/menu'
+import { DishesRoutes } from './routes/dishesRoutes'
 
 class Server {
   app: FastifyInstance
@@ -9,7 +9,7 @@ class Server {
   }
 
   routes() {
-    new MenuRoutes(this.app)
+    new DishesRoutes(this.app)
   }
 
   start() {
