@@ -1,5 +1,6 @@
 import fastify, { FastifyInstance } from 'fastify'
 import { DishesRoutes } from './routes/dishesRoutes'
+import { UserRoutes } from './routes/userRoutes'
 
 class Server {
   app: FastifyInstance
@@ -10,6 +11,7 @@ class Server {
 
   routes() {
     new DishesRoutes(this.app)
+    new UserRoutes(this.app)
   }
 
   start() {
