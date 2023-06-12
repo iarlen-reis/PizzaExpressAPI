@@ -69,6 +69,7 @@ export class UserController {
 
     const token = jwt.sign(
       {
+        id: user.id,
         name: user.name,
         email,
         role: user.role,
@@ -80,5 +81,26 @@ export class UserController {
     )
 
     return { token }
+  }
+
+  async profile(request: FastifyRequest, reply: FastifyReply) {
+    const userId = request.user.id
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        orders: {
+          include: { dish: true },
+        },
+      },
+    })
+
+    if (!user) {
+      return reply.status(404).send({ error: 'User not found.' })
+    }
+
+    return user
   }
 }
