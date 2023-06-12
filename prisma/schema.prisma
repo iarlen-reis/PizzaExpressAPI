@@ -26,6 +26,7 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+  role      Int      @default(0)
   orders    Order[]
 }
 
