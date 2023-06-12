@@ -1,6 +1,7 @@
 import fastify, { FastifyInstance } from 'fastify'
 import { DishesRoutes } from './routes/dishesRoutes'
 import { UserRoutes } from './routes/userRoutes'
+import { OrderRoutes } from './routes/orderRoutes'
 
 class Server {
   app: FastifyInstance
@@ -12,6 +13,7 @@ class Server {
   routes() {
     new DishesRoutes(this.app)
     new UserRoutes(this.app)
+    new OrderRoutes(this.app)
   }
 
   start() {
