@@ -16,6 +16,10 @@ export class DishesController {
   }
 
   async store(request: FastifyRequest, reply: FastifyReply) {
+    if (request.user.role !== 1) {
+      return reply.status(401).send({ error: 'unauthorized user.' })
+    }
+
     try {
       const bodySchema = z.object({
         title: z.string(),
@@ -66,6 +70,10 @@ export class DishesController {
   }
 
   async update(request: FastifyRequest, reply: FastifyReply) {
+    if (request.user.role !== 1) {
+      return reply.status(401).send({ error: 'unauthorized user.' })
+    }
+
     const paramsSchema = z.object({
       id: z.string(),
     })
@@ -105,6 +113,9 @@ export class DishesController {
   }
 
   async delete(request: FastifyRequest, reply: FastifyReply) {
+    if (request.user.role !== 1) {
+      return reply.status(401).send({ error: 'unauthorized user.' })
+    }
     try {
       const paramsSchema = z.object({
         id: z.string(),

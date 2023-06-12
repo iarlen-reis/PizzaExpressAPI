@@ -5,6 +5,7 @@ declare module 'fastify' {
     user: {
       name: string
       email: string
+      role: number
     }
   }
 }

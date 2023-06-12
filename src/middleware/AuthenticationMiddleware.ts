@@ -6,6 +6,7 @@ interface TokenPayload {
   sub: string
   email: string
   name: string
+  role: number
 }
 
 export class AuthenticationMiddleware {
