@@ -71,6 +71,7 @@ export class UserController {
       {
         name: user.name,
         email,
+        role: user.role,
       },
       env.SECRET,
       {
