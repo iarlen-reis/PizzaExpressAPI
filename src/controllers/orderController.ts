@@ -19,15 +19,15 @@ export class OrderController {
   }
 
   async create(request: FastifyRequest, reply: FastifyReply) {
-    const bodySchema = z.object({
-      dishId: z.string(),
+    const paramsSchema = z.object({
+      id: z.string(),
     })
 
-    const { dishId } = bodySchema.parse(request.body)
+    const { id } = paramsSchema.parse(request.params)
 
     const dish = await prisma.dish.findUnique({
       where: {
-        id: dishId,
+        id,
       },
     })
 
@@ -43,5 +43,50 @@ export class OrderController {
     })
 
     return order
+  }
+
+  async show(request: FastifyRequest, reply: FastifyReply) {
+    const paramsSchema = z.object({
+      id: z.string(),
+    })
+
+    const { id } = paramsSchema.parse(request.params)
+
+    const order = await prisma.order.findUniqueOrThrow({
+      where: {
+        id,
+      },
+      include: { dish: true },
+    })
+
+    if (order.userId !== request.user.id && request.user.role !== 1) {
+      return reply.status(401).send({ error: 'operation not allowed.' })
+    }
+
+    return order
+  }
+
+  async delete(request: FastifyRequest, reply: FastifyReply) {
+    const paramsSchema = z.object({
+      id: z.string(),
+    })
+
+    const { id } = paramsSchema.parse(request.params)
+
+    const order = await prisma.order.findUniqueOrThrow({
+      where: {
+        id,
+      },
+    })
+
+    if (order.userId !== request.user.id && request.user.role !== 1) {
+      return reply.status(401).send({ error: 'operation not allowed.' })
+    }
+
+    await prisma.order.delete({
+      where: {
+        id: order.id,
+      },
+    })
   }
 }
