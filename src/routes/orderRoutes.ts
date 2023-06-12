@@ -21,10 +21,22 @@ export class OrderRoutes {
       { preHandler: this.auth.authenticate },
       this.orderController.index,
     )
+    this.app.get(
+      '/orders/:id',
+      { preHandler: this.auth.authenticate },
+      this.orderController.show,
+    )
+
     this.app.post(
-      '/orders',
+      '/orders/:id',
       { preHandler: this.auth.authenticate },
       this.orderController.create,
+    )
+
+    this.app.delete(
+      '/orders/:id',
+      { preHandler: this.auth.authenticate },
+      this.orderController.delete,
     )
   }
 }
