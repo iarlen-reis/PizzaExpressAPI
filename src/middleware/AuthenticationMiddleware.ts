@@ -7,6 +7,7 @@ interface TokenPayload {
   email: string
   name: string
   role: number
+  id: string
 }
 
 export class AuthenticationMiddleware {
