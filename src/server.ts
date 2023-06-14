@@ -2,18 +2,30 @@ import fastify, { FastifyInstance } from 'fastify'
 import { DishesRoutes } from './routes/dishesRoutes'
 import { UserRoutes } from './routes/userRoutes'
 import { OrderRoutes } from './routes/orderRoutes'
+import { UploadRoutes } from './routes/uploadRoutes'
+import { resolve } from 'path'
+
+import multipart from '@fastify/multipart'
 
 class Server {
   app: FastifyInstance
 
   constructor() {
     this.app = fastify()
+
+    this.app.register(multipart)
+
+    this.app.register(require('@fastify/static'), {
+      root: resolve(__dirname, '../', 'uploads'),
+      prefix: '/uploads',
+    })
   }
 
   routes() {
     new DishesRoutes(this.app)
     new UserRoutes(this.app)
     new OrderRoutes(this.app)
+    new UploadRoutes(this.app)
   }
 
   start() {
