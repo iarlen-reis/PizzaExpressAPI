@@ -23,6 +23,8 @@
   },
   "dependencies": {
     "@fastify/jwt": "^7.0.0",
+    "@fastify/multipart": "^7.6.1",
+    "@fastify/static": "^6.10.2",
     "@prisma/client": "^4.15.0",
     "@types/bcrypt": "^5.0.0",
     "bcrypt": "^5.1.0",
