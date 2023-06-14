@@ -28,6 +28,7 @@ model Order {
   dish      Dish     @relation(fields: [dishId], references: [id])
   dishId    String   @db.ObjectId
   createdAt DateTime @default(now())
+  status    String   @default("pendente")
 }
 
 model Dish {
@@ -38,10 +39,14 @@ model Dish {
   createdAt   DateTime @default(now())
   ingredients String[]
   Order       Order[]
+
+  upload   Upload @relation(fields: [uploadId], references: [id])
+  uploadId String @db.ObjectId
 }
 
 model Upload {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   imagePath String
+  Dish      Dish[]
 }
