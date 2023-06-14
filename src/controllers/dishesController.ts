@@ -5,7 +5,7 @@ import { z } from 'zod'
 export class DishesController {
   async index(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const dishes = await prisma.dish.findMany()
+      const dishes = await prisma.dish.findMany({ include: { upload: true } })
 
       reply.status(200).send(dishes)
     } catch (error) {
@@ -25,12 +25,12 @@ export class DishesController {
         title: z.string(),
         description: z.string(),
         price: z.string(),
+        uploadId: z.string(),
         ingredients: z.array(z.string()),
       })
 
-      const { title, description, price, ingredients } = bodySchema.parse(
-        request.body,
-      )
+      const { title, description, price, ingredients, uploadId } =
+        bodySchema.parse(request.body)
 
       const dish = await prisma.dish.create({
         data: {
@@ -38,7 +38,9 @@ export class DishesController {
           description,
           price,
           ingredients,
+          uploadId,
         },
+        include: { upload: true },
       })
 
       reply.status(201).send(dish)
@@ -61,6 +63,7 @@ export class DishesController {
         where: {
           id,
         },
+        include: { upload: true },
       })
 
       return dish

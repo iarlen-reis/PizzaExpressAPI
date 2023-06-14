@@ -32,8 +32,6 @@ export class UploadController {
 
     const imageName = upload.fields.name.value
 
-    console.log(upload.fields)
-
     const extension = extname(upload.filename)
 
     const fileName = imageName.concat(extension)
