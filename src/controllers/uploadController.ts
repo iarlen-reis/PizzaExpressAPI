@@ -4,11 +4,22 @@ import { extname, resolve } from 'node:path'
 import { pipeline } from 'node:stream'
 import { promisify } from 'node:util'
 import { prisma } from '../lib/prisma'
+import { z } from 'zod'
 
 const pump = promisify(pipeline)
 
 export class UploadController {
+  async index(request: FastifyRequest, reply: FastifyReply) {
+    const imagesDishes = await prisma.upload.findMany()
+
+    return imagesDishes
+  }
+
   async create(request: FastifyRequest, reply: FastifyReply) {
+    if (request.user.role !== 1) {
+      return reply.status(401).send({ error: 'unauthorized user.' })
+    }
+
     const upload = await request.file({
       limits: {
         fileSize: 5242880,
@@ -20,6 +31,8 @@ export class UploadController {
     if (!upload.fields.name) return reply.status(400).send()
 
     const imageName = upload.fields.name.value
+
+    console.log(upload.fields)
 
     const extension = extname(upload.filename)
 
@@ -42,5 +55,29 @@ export class UploadController {
     })
 
     return imageupload
+  }
+
+  async delete(request: FastifyRequest, reply: FastifyReply) {
+    if (request.user.role !== 1) {
+      return reply.status(401).send({ error: 'unauthorized user.' })
+    }
+
+    const paramsShema = z.object({
+      id: z.string(),
+    })
+
+    const { id } = paramsShema.parse(request.params)
+
+    const dishImage = await prisma.upload.findUniqueOrThrow({
+      where: {
+        id,
+      },
+    })
+
+    await prisma.upload.delete({
+      where: {
+        id: dishImage.id,
+      },
+    })
   }
 }

@@ -16,6 +16,16 @@ export class UploadRoutes {
   }
 
   allUserRoutes() {
-    this.app.post('/dishes/upload', this.uploadController.create)
+    this.app.get('/dishes/upload', this.uploadController.index)
+    this.app.post(
+      '/dishes/upload',
+      { preHandler: this.auth.authenticate },
+      this.uploadController.create,
+    )
+    this.app.delete(
+      '/dishes/upload/:id',
+      { preHandler: this.auth.authenticate },
+      this.uploadController.delete,
+    )
   }
 }
