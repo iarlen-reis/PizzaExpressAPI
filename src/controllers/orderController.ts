@@ -6,7 +6,7 @@ export class OrderController {
   async index(request: FastifyRequest, reply: FastifyReply) {
     if (request.user.role === 1) {
       return await prisma.order.findMany({
-        include: { dish: true },
+        include: { dish: { include: { upload: true } } },
       })
     }
 
@@ -14,7 +14,33 @@ export class OrderController {
       where: {
         userId: request.user.id,
       },
-      include: { dish: true },
+      include: { dish: { include: { upload: true } } },
+    })
+  }
+
+  async indexQuery(request: FastifyRequest, reply: FastifyReply) {
+    const queryShema = z.object({
+      q: z.string(),
+    })
+    const { q } = queryShema.parse(request.query)
+
+    console.log(q)
+
+    if (request.user.role === 1) {
+      return await prisma.order.findMany({
+        include: { dish: { include: { upload: true } } },
+        where: {
+          status: q,
+        },
+      })
+    }
+
+    return prisma.order.findMany({
+      where: {
+        userId: request.user.id,
+        status: q,
+      },
+      include: { dish: { include: { upload: true } } },
     })
   }
 
@@ -39,7 +65,7 @@ export class OrderController {
         userId: request.user.id,
         createdBy: request.user.name,
       },
-      include: { dish: true },
+      include: { dish: { include: { upload: true } } },
     })
 
     return order
@@ -56,7 +82,7 @@ export class OrderController {
       where: {
         id,
       },
-      include: { dish: true },
+      include: { dish: { include: { upload: true } } },
     })
 
     if (order.userId !== request.user.id && request.user.role !== 1) {

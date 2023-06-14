@@ -26,7 +26,11 @@ export class OrderRoutes {
       { preHandler: this.auth.authenticate },
       this.orderController.show,
     )
-
+    this.app.get(
+      '/orders/filter/:query',
+      { preHandler: this.auth.authenticate },
+      this.orderController.indexQuery,
+    )
     this.app.post(
       '/orders/:id',
       { preHandler: this.auth.authenticate },
