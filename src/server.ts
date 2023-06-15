@@ -3,6 +3,7 @@ import { DishesRoutes } from './routes/dishesRoutes'
 import { UserRoutes } from './routes/userRoutes'
 import { OrderRoutes } from './routes/orderRoutes'
 import { UploadRoutes } from './routes/uploadRoutes'
+import { GraphicRoutes } from './routes/graphicRoutes'
 import { resolve } from 'path'
 
 import multipart from '@fastify/multipart'
@@ -26,6 +27,7 @@ class Server {
     new UserRoutes(this.app)
     new OrderRoutes(this.app)
     new UploadRoutes(this.app)
+    new GraphicRoutes(this.app)
   }
 
   start() {
