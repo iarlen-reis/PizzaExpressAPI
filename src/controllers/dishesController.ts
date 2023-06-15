@@ -32,6 +32,18 @@ export class DishesController {
       const { title, description, price, ingredients, uploadId } =
         bodySchema.parse(request.body)
 
+      const imageExits = await prisma.upload.findUnique({
+        where: {
+          id: uploadId,
+        },
+      })
+
+      if (!imageExits) {
+        return reply
+          .status(401)
+          .send({ error: 'image not found, upload again her and try again.' })
+      }
+
       const dish = await prisma.dish.create({
         data: {
           title,
@@ -48,6 +60,7 @@ export class DishesController {
       reply
         .status(500)
         .send({ error: 'An error occurred, please try again later.' })
+      console.log(error)
     }
   }
 
