@@ -5,6 +5,10 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 
 export class GraphicController {
   async index(request: FastifyRequest, reply: FastifyReply) {
+    if (request.user.role !== 1) {
+      return reply.status(401).send({ error: 'unauthorized user.' })
+    }
+
     const queryShema = z.object({
       q: z.string(),
     })
